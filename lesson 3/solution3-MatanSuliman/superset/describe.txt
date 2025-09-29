@@ -1,0 +1,53 @@
+PS C:\Users\matan\OneDrive\שולחן העבודה\מתן\DevOps Experts\lesson 3> kubectl describe pod/superset
+Name:             superset
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             desktop-control-plane/172.18.0.2
+Start Time:       Sun, 07 Sep 2025 12:58:56 +0300
+Labels:           run=superset
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.5
+IPs:
+  IP:  10.244.0.5
+Containers:
+  superset:
+    Container ID:   containerd://da2461f62eae5a66caff9aa7455cddaf8ff9bcaf38af70163b05758c860d64a1
+    Image:          amancevice/superset
+    Image ID:       docker.io/amancevice/superset@sha256:085e6ff15c8d04e74f5af77eb2adfbbe71c02971a3d0b3d8032db395c10ade5a
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sun, 07 Sep 2025 13:02:56 +0300
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-gqs4d (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-gqs4d:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  6m33s  default-scheduler  Successfully assigned default/superset to desktop-control-plane
+  Normal  Pulling    6m33s  kubelet            Pulling image "amancevice/superset"
+  Normal  Pulled     2m33s  kubelet            Successfully pulled image "amancevice/superset" in 3m59.574s (3m59.574s including waiting). Image size: 1053334006 bytes.
+  Normal  Created    2m33s  kubelet            Created container superset
+  Normal  Started    2m33s  kubelet            Started container superset

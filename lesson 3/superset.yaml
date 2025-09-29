@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: superset
+  template:
+    metadata:
+      labels:
+        app: superset
+    spec:  # spec of pods
+      containers:
+      - name: superset  # name of pod
+        image: amancevice/superset  # image of pod
+        ports:
+        - containerPort: 8088  # listens on port 8088
+        env:
+        - name: SUPERSET_SECRET_KEY
+          value: "matansul-secretkey"
+---
+apiVersion: v1
+kind: Service # network
+metadata:
+  name: superset  # name of network
+spec:
+  selector:
+    app: superset
+  type: NodePort  #
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8088
+    targetPort: 8088

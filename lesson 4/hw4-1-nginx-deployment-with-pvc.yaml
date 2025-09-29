@@ -1,0 +1,61 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: task1-nginx-pv
+  labels:
+    type: local
+
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  persistentVolumeReclaimPolicy: Retain    # keep data if PVC is deleted
+  hostPath:
+    path: "/data/nginx/"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: task1-nginx-pvc
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ""
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task1-nginx-deployment-with-pvc
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task1-nginx-deployment-with-pvc
+  template:
+    metadata:
+      labels:
+        app: task1-nginx-deployment-with-pvc
+
+    spec:
+      volumes:
+        - name: task1-nginx-pv
+          persistentVolumeClaim:
+           claimName: task1-nginx-pvc
+      containers:
+        - name: task1-nginx-container
+          image: nginx:stable
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html"
+              name: task1-nginx-pv

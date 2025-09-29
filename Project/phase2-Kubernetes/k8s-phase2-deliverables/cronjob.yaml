@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: myapp-healthcheck
+  namespace: myapp
+spec:
+  schedule: "*/1 * * * *" # every minute
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: curl
+              image: curlimages/curl:8.10.1
+              args:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+                  URL="http://myapp.myapp.svc.cluster.local:8080/"
+                  TS="$(date -Iseconds)"
+                  status=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || true)
+                  if [ "$status" = "200" ]; then
+                    echo "$TS OK myapp is healthy (HTTP 200)"
+                  else
+                    echo "$TS ERROR myapp returned HTTP $status" >&2
+                    exit 1
+                  fi

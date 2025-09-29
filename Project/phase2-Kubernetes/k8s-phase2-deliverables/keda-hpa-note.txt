@@ -1,0 +1,2 @@
+Optional: If you want event-driven autoscaling (queue length, requests per second), consider KEDA.
+This project uses the built-in HPA (CPU/Memory). KEDA would be extra and is not required.
